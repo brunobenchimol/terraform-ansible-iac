@@ -35,3 +35,7 @@ Having issues when destroying Ubuntu Cloud Images complains about needing a cdro
 `vSphere Fix`: Disable vApp Options on vSphere Template
 `Terraform Fix`: Add cdrom {} and vapp {} on vsphere_virtual_machine {} and revert configs to cloud-init versions early than 21.3 
 `Ubuntu Fix`: Change datasource order list to read "VMware" before "OVF"
+
+# References
+
+1. 
