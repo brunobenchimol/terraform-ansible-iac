@@ -1,0 +1,16 @@
+---
+- hosts: all
+  name: "Sample Ansible PlayBook"
+  become: yes
+
+  tasks:
+  
+  - name: Delay 10 seconds and Wait 300 seconds for target connection to become reachable/usable
+    wait_for_connection:
+      delay: 10
+      timeout: 300
+
+  - name: "'touch' Sample File"
+    file:
+      dest: /root/touch.ansible
+      state: touch
