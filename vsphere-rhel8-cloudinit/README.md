@@ -41,8 +41,8 @@ We need [cloud-init-vmware-guestinfo](https://github.com/vmware-archive/cloud-in
 
 # References
 
-1. (https://www.infralovers.com/en/articles/2021/01/21/vmware-templates-with-terraform-and-cloud-init/)  
-2. (https://grantorchard.com/terraform-vsphere-cloud-init/)  
-3. (https://blog.linoproject.net/cloud-init-with-terraform-in-vsphere-environment/)  
-4. (https://blah.cloud/infrastructure/using-cloud-init-for-vm-templating-on-vsphere/)  
-5. (https://access.redhat.com/blogs/1169563/posts/3640721)  
+1. https://www.infralovers.com/en/articles/2021/01/21/vmware-templates-with-terraform-and-cloud-init/  
+2. https://grantorchard.com/terraform-vsphere-cloud-init/  
+3. https://blog.linoproject.net/cloud-init-with-terraform-in-vsphere-environment/  
+4. https://blah.cloud/infrastructure/using-cloud-init-for-vm-templating-on-vsphere/  
+5. https://access.redhat.com/blogs/1169563/posts/3640721  

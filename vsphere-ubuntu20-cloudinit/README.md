@@ -39,7 +39,7 @@ Having issues when destroying Ubuntu Cloud Images complains about needing a cdro
 
 # References
 
-1. (https://www.infralovers.com/en/articles/2021/01/21/vmware-templates-with-terraform-and-cloud-init/)  
-2. (https://grantorchard.com/terraform-vsphere-cloud-init/)   
-3. (https://blog.linoproject.net/cloud-init-with-terraform-in-vsphere-environment/)  
-4. (https://blah.cloud/infrastructure/using-cloud-init-for-vm-templating-on-vsphere/)   
+1. https://www.infralovers.com/en/articles/2021/01/21/vmware-templates-with-terraform-and-cloud-init/
+2. https://grantorchard.com/terraform-vsphere-cloud-init/   
+3. https://blog.linoproject.net/cloud-init-with-terraform-in-vsphere-environment/  
+4. https://blah.cloud/infrastructure/using-cloud-init-for-vm-templating-on-vsphere/   
