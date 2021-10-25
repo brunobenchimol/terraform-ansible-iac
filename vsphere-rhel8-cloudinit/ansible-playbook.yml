@@ -1,0 +1,24 @@
+---
+- hosts: all
+  name: "Sample Ansible PlayBook"
+  become: yes
+
+  tasks:
+  
+  - name: Delay 10 seconds and Wait 300 seconds for target connection to become reachable/usable
+    wait_for_connection:
+      delay: 10
+      timeout: 300
+
+  - name: "'touch' Sample File"
+    file:
+      dest: /root/touch.rhel8.ansible
+      state: touch
+
+  - name: Register to RHN auto-subscribe to available content.
+    redhat_subscription:
+      state: present
+      username: "{{ lookup('env', 'RHN_USERNAME') }}"
+      password: "{{ lookup('env', 'RHN_PASSWORD') }}"
+      auto_attach: true
+    when: lookup('env', 'ENABLE_RHN') == 'true'

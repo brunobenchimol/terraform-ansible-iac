@@ -10,7 +10,17 @@
 # Make sure cloud-init is installed
 yum -y install cloud-init
 
-# https://access.redhat.com/blogs/1169563/posts/3640721
+# Make sure we have python installed (at least 3.6) for ansible playbooks
+yum -y install python36
+
+#
+## CLEAN UP PROCEDURES
+#
+
+# make sure cloud init is clean if it wsa ran by mistake.
+cloud-init clean
+userdel cloud-users
+rm -f /var/log/cloud-init*
 
 # Unregister Virtual Machine from Satellite/RHN
 subscription-manager unregister
@@ -54,8 +64,3 @@ unset HISTFILE
 
 #remove root users SSH history
 /bin/rm -rf ~root/.ssh/known_hosts
-
-# make sure cloud init is clean if it wsa ran by mistake.
-cloud-init clean
-userdel cloud-users
-rm -f /var/log/cloud-init*
