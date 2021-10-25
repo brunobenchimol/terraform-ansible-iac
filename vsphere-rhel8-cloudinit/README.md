@@ -14,8 +14,8 @@ RHEL 8 on vSphere + Terraform + Ansible + Cloud-Init
 
 # Enviroment Tested
 
-vSphere 7
-RHEL 8.4
+vSphere 7   
+RHEL 8.4   
 
 
 # Important Files 
@@ -32,7 +32,7 @@ RHEL 8.4
 # Preparing RHEL 8 Template
 
  You must install [cloud-init-vmware-guestinfo](https://github.com/vmware-archive/cloud-init-vmware-guestinfo) until Red Hat updates cloud-init to 21.3+.     
- There is a simple script on [scripts/rhel-prep-template.sh] that help on this process. Other steps on the script are to cleanup the installation to better suit needs to provision/clone multiple VMs.  
+ There is a simple script on [scripts/rhel-prep-template.sh](https://github.com/brunobenchimol/terraform-ansible-cicd/blob/main/vsphere-rhel8-cloudinit/scripts/rhel-prep-template.sh) that help on this process. Other steps on the script are to cleanup the installation to better suit needs to provision/clone multiple VMs.  
 
 
 # Notes / Caveats
@@ -42,14 +42,14 @@ Most of these files are placeholder examples. You should change to suit your nee
 [Cloud-Init Examples](https://cloudinit.readthedocs.io/en/latest/topics/examples.html)  
 [Ansible User Guide](https://docs.ansible.com/ansible/latest/user_guide/index.html)  
 
-2. **RHEL 8.4 Cloud-init version is outdated** 
-We need [cloud-init-vmware-guestinfo](https://github.com/vmware-archive/cloud-init-vmware-guestinfo) deprecated plugin becase of RHEL 8.4 provides cloud-init version 20.3 and we need a newer version 21.3 to read extra_config (VMX Advanced Options). You must execute "template preperation before" running Terraform  
+2. **RHEL 8.4 Cloud-init version is outdated**   
+We need [cloud-init-vmware-guestinfo](https://github.com/vmware-archive/cloud-init-vmware-guestinfo) deprecated plugin becase of RHEL 8.4 provides cloud-init version 20.3 and we need a newer version 21.3 to read extra_config (VMX Advanced Options). You must execute "template preperation before" running Terraform.  
 
-3. **vSphere Provider and Content Library Item does not have a firmware type**
-Follow/Watch discussion on [GitHub Issue#1496](https://github.com/hashicorp/terraform-provider-vsphere/issues/1496)  
+3. **vSphere Provider and Content Library Item does not have a firmware type**    
+Follow/Watch discussion on [GitHub Issue#1496](https://github.com/hashicorp/terraform-provider-vsphere/issues/1496)    
 `Quick Fix`: Set firmware to 'efi' or 'bios' depending on your template/installation. Default is 'bios'.  
 
-4. **RHN Register Support Cloud-Init**
+4. **RHN Register Support Cloud-Init**    
 It will expose your RHN credentials in clear-text. We favor using ansible to subscribe to RHN as its easier to protect/not expose your password. Because of that we must have python installed on VM template. `Default` to *ansible*.  
 Set Terraform Variable `force_rhn_enable_cloud_init` to **true** if you want to use cloud-init userdata instead of ansible.  
 
