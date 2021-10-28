@@ -1,0 +1,26 @@
+- name: Change listen_address to bind to '*'
+  community.postgresql.postgresql_set:
+    name: listen_addresses
+    value: "*"
+  notify:
+  - restart postgresql
+  when: bind_all_ip_address == 'true'
+
+- name: Set max_connections
+  community.postgresql.postgresql_set:
+    name: max_connections
+    value: '{{ max_connections }}'
+  notify:
+  - restart postgresql
+ 
+- name: Set work_mem
+  community.postgresql.postgresql_set:
+    name: work_mem
+    value: '{{ work_mem }}'
+
+- name: Set shared_buffers 
+  community.postgresql.postgresql_set:
+    name: shared_buffers
+    value: '{{ shared_buffers }}'
+  notify:
+  - restart postgresql

@@ -1,0 +1,23 @@
+- name: Install PHP Support
+  ansible.builtin.package:
+    name:
+     - php
+     - php-pgsql
+    state: present
+  notify:
+  - restart httpd
+
+- name: Copy PHP Info File
+  ansible.builtin.copy:
+    src: phpinfo.php
+    dest: /var/www/html/phpinfo.php
+
+- name: Generate index.html from template
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+
+- name: Download File / PHP Application (PHP HTTP VARS)
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/brunobenchimol/php-http-vars/main/index.php
+    dest: /var/www/html/php-http-vars.php

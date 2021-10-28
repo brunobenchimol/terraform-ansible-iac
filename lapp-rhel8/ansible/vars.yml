@@ -1,0 +1,16 @@
+---
+
+pgsql_version: 13
+pgsql_use_redhat_appstream: true
+pgsql_bind_all_ip_address: false
+pgsql_max_connections: "15"
+pgsql_work_mem: "2MB"
+pgsql_shared_buffers: "64MB"  
+
+lvm_pe_size: "16M"
+lvm_vg_name: "database_vg"
+lvm_pv_name: "/dev/sdb"
+lvm_lv_name: "pgsql_data"
+lvm_mount_path: "/var/lib/pgsql"
+
+linux_upgrade_packages: "{{ lookup('env', 'UPGRADE_PACKAGES')|lower | default('false') }}"

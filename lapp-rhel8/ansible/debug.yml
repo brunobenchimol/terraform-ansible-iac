@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+
+  - debug: msg="{{bind_all_ip_address}}"
+  - debug: var="{{vg_name}}"
+  - debug: var="{{upgrade_packages}}"
+  - debug: msg="{{work_mem}}"
+  - debug: msg="{{pe_size}}"

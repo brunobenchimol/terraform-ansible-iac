@@ -1,0 +1,31 @@
+- name: Create LVM Disk / Volume Group
+  lvg:
+    vg: '{{ vg_name }}'
+    pvs: '{{ pv_name }}'
+    pesize: '{{ pe_size }}'
+
+- name: Create Logical Volume 
+  lvol:
+    vg: '{{ vg_name }}'
+    lv: '{{ lv_name }}'
+    size: 100%FREE
+    resizefs : yes
+    shrink: no
+
+- name: Format {{ lv_name }} with xfs filesystem
+  filesystem:
+    fstype: '{{ fs_type }}'
+    dev: "/dev/{{vg_name}}/{{lv_name}}"
+
+- name: Create directory {{ mount_path }} if does not exist
+  file:
+    path: '{{ mount_path }}'
+    state: directory
+    mode: '0755'
+
+- name: Mount Volume
+  mount:
+    path: '{{ mount_path }}'
+    src: "/dev/{{vg_name}}/{{lv_name}}"
+    fstype: '{{ fs_type }}'
+    state: mounted

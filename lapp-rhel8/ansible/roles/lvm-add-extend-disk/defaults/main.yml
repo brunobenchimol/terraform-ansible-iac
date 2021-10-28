@@ -1,0 +1,6 @@
+pe_size: 16M
+vg_name: myvg
+pv_name: "/dev/sdb"
+lv_name: mylv
+mount_path: /var/lib/pgsql
+fs_type: xfs
