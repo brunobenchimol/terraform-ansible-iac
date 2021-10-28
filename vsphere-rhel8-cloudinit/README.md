@@ -34,7 +34,7 @@ RHEL 8.4
  You must install [cloud-init-vmware-guestinfo](https://github.com/vmware-archive/cloud-init-vmware-guestinfo) until Red Hat updates cloud-init to 21.3+.     
  There is a simple script on [scripts/rhel-prep-template.sh](https://github.com/brunobenchimol/terraform-ansible-cicd/blob/main/vsphere-rhel8-cloudinit/scripts/rhel-prep-template.sh) that help on this process. Other steps on the script are to cleanup the installation to better suit needs to provision/clone multiple VMs.  
 
-**This is step is mandatory and must be done outside of Terraform**
+**This step is mandatory and must be done outside of Terraform**
 
 # TODO
 Get around template preparation with `Packer`. Depends on how fast Red Hat will deliver cloud-init updated version.
