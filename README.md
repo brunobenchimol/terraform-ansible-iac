@@ -1,6 +1,7 @@
-# IaC (Infrastructure as Code) - Automation with Terraform/Ansible
+# IaC on Terraform/Ansible
+*Infrastructure as Code Automation with Terraform/Ansible* 
 
-Quick links To Projects:
+Quick Links To Projects:
 
 [vsphere-ubuntu20-cloudinit](https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/vsphere-ubuntu20-cloudinit) - Terraform + Ansible + Cloud-Init Example for Ubuntu 20.04 LTS on vSphere 7+    
 [vsphere-rhel8-cloudinit](https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/vsphere-rhel8-cloudinit) - Terraform + Ansible + Cloud-Init Example for RHEL 8.4 on vSphere 7+    
