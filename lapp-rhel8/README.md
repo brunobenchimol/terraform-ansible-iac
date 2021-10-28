@@ -45,7 +45,7 @@ RHEL 8.4
 1. Certbot / Lets Encrypt / ACME  
 2. Fully Configure Database (create db, import application sql dump)  
 3. Install/Create PHP Application that reads Database Information  
-
+4. When destroying resources (virtual machine) unregister from RHN/Satellite
 
 # Notes / Caveats
 
@@ -60,7 +60,7 @@ Most of my IaC on RHEL systems. I could develop some on Debian aswell, but we ru
 
 4. **Ansible/Database Configuration**    
 Edit `ansible/vars.yml` to set parameters (*variables*) for you database. We do not have many to set yet.   
-**TODO:** Make one ansible parameter file outside to set every parameter ansible needs or inside Terraform and use enviroment vars to lookup.    
+**Question:** Use vars.yml or Use enviroment and pass it using Terraform enviroment and lookup (!?)      
 
 
 # References
