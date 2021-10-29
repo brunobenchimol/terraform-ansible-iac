@@ -59,7 +59,9 @@ Most of my IaC on RHEL systems. I could develop some on Debian aswell, but we ru
 
 4. **Unregistering from RHN/Satellite only works when using default ssh key location \(~/.ssh/id_rsa\*\)**    
 *Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.*   
-Cant see to find a way to pass ssh key location on a variable using self or any of these *reference attributes*. **HELP WANTED** to fix this issue.  
+Cant see to find a way to pass ssh key location on a variable using self or any of these *reference attributes*.   
+`Dirty Fix`: Created a resource to generate "local_file" ansible.cfg in the current directly with private_key_file. Not pretty but does the job. May break if you have/need a custom ansible.cfg in-place.
+**HELP WANTED** to fix/discuss this issue.  
 
 5. **Ansible/Database Configuration**    
 Edit `ansible/vars.yml` to set parameters (*variables*) for you database. We do not have many to set yet.   

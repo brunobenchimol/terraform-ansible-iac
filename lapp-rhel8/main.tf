@@ -130,7 +130,20 @@ resource "vsphere_virtual_machine" "vm-lapp" {
     # CAVEAT: CANT USE SSH KEY OUTSIDE DEFAULT LOCATION -- cant get variable on self
     # Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
     #command = "ansible -i ${self.default_ip_address}, all --user root --private-key ${var.ssh_private_key} -m redhat_subscription  -a \"state=absent\""
+    # Quick Fix: Create ansible.cfg in the root directory
     command = "ansible -i ${self.default_ip_address}, all --user root -m redhat_subscription  -a \"state=absent\""
   }
  
+}
+
+resource "local_file" "ansible_config" {
+  count = (var.ssh_private_key != "~/.ssh/id_rsa" ? 1 : 0 )
+  filename = "${path.root}/ansible.cfg"
+  file_permission = 0640
+
+  content = <<-EOF
+    [defaults]
+    private_key_file = ${var.ssh_private_key}
+  EOF
+
 }
