@@ -7,14 +7,14 @@
 ### VSPHERE VARIABLES ###
 #########################
 
-#vsphere_user = "login_vsphere"
-#vsphere_password = "pass"
-vsphere_server = "vcenter.gerencia.prodepa.gov.br"
-vsphere_dcname = "DC_PRODEPA"
-vsphere_datastore = "VNX7602-VMWARE-INFRAESTRUTURA"
-vsphere_cluster = "Cluster_Openshift_Staging"
-vsphere_network = "SRV_Desenv-10.1.11.0_24"
-vsphere_library_name = "PRODEPA_Content_Library"
+vsphere_server = "vcenter.server.example.local"
+vsphere_user = "LOGIN"
+vsphere_password = "PASS"
+vsphere_dcname = "DC_NAME_EXAMPLE"
+vsphere_datastore = "DATASTORE_EXAMPLE"
+vsphere_cluster = "CLUSTER_EXAMPLE"
+vsphere_network = "NETWORK_PORTGROUP_EXAMPLE"
+vsphere_library_name = "EXAMPLE_CONTENT_LIBRARY"
 vsphere_library_item = "Template_Server_RHEL_8.4_x64_CloudInit"
 
 
@@ -31,7 +31,7 @@ vsphere_library_item = "Template_Server_RHEL_8.4_x64_CloudInit"
 ### Application VARIABLES ###
 #############################
 
-app_prefix_name = "lapp"
+app_prefix_name = "example"
 app_database_disk_size = 20
 
 ######################
@@ -49,11 +49,11 @@ vm_efi_secure_boot_enabled = false
 #vm_count = 1
 ###########################
 ### FOR STATIC IP USAGE ###
-vm_ipaddress_list = ["10.1.11.221"]
+vm_ipaddress_list = ["10.1.1.111"]
 vm_ipnetmask = "24"
-vm_gateway = "10.1.11.7"
-vm_dns_servers = ["10.1.2.3", "10.1.2.5"]
-vm_domain = ["rede.local"]
+vm_gateway = "10.1.11.254"
+vm_dns_servers = ["10.1.1.1", "10.1.1.2"]
+vm_domain = ["example.local"]
 ###########################
 
 

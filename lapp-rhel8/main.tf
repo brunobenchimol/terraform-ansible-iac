@@ -90,17 +90,17 @@ resource "vsphere_virtual_machine" "vm-lapp" {
     "guestinfo.userdata.encoding" = "base64"
   }
 
-  # SSH connection config
-  connection {
-    type     = "ssh"
-    port     = "22"
-    user     = "root"
-    host      = "${self.default_ip_address}"
-    private_key = file(var.ssh_private_key)
-  }
-
   # Make sure host is up and running to run ansible-playbook
   provisioner "remote-exec" {
+    # SSH connection config
+    connection {
+      type     = "ssh" # default
+      port     = "22" # default
+      user     = "root" # default
+      host      = "${self.default_ip_address}"
+      private_key = file(var.ssh_private_key)
+    }
+
     inline = [ "uptime" ]
   }
 
@@ -122,4 +122,15 @@ resource "vsphere_virtual_machine" "vm-lapp" {
     }
   }
 
+  # unregister machine from RHN/Satellite when destroying
+  provisioner "local-exec" {
+    when        = destroy
+    on_failure  = continue
+
+    # CAVEAT: CANT USE SSH KEY OUTSIDE DEFAULT LOCATION -- cant get variable on self
+    # Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.
+    #command = "ansible -i ${self.default_ip_address}, all --user root --private-key ${var.ssh_private_key} -m redhat_subscription  -a \"state=absent\""
+    command = "ansible -i ${self.default_ip_address}, all --user root -m redhat_subscription  -a \"state=absent\""
+  }
+ 
 }
