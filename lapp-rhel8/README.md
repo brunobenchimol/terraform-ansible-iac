@@ -45,7 +45,6 @@ RHEL 8.4
 1. Certbot / Lets Encrypt / ACME  
 2. Fully Configure Database (create db, import application sql dump)  
 3. Install/Create PHP Application that reads Database Information  
-4. When destroying resources (virtual machine) unregister from RHN/Satellite
 
 # Notes / Caveats
 
@@ -58,7 +57,11 @@ Its only an example how to deploy a LAPP (opposed to [LAMP](https://en.wikipedia
 3. **Is it only for RHEL ?**    
 Most of my IaC on RHEL systems. I could develop some on Debian aswell, but we running RHEL (Rocky Linux soon) since everyone has 16 "free" systems registered. Because of that Ansible Playbooks are mostly running only on RHEL and not Debian flavour distros.   
 
-4. **Ansible/Database Configuration**    
+4. **Unregistering from RHN/Satellite only works when using default ssh key location \(~/.ssh/id_rsa\*\)**    
+*Destroy-time provisioners and their connection configurations may only reference attributes of the related resource, via 'self', 'count.index', or 'each.key'.*   
+Cant see to find a way to pass ssh key location on a variable using self or any of these *reference attributes*. **HELP WANTED** to fix this issue.  
+
+5. **Ansible/Database Configuration**    
 Edit `ansible/vars.yml` to set parameters (*variables*) for you database. We do not have many to set yet.   
 **Question:** Use vars.yml or Use enviroment and pass it using Terraform enviroment and lookup (!?)      
 
