@@ -2,3 +2,9 @@ bind_all_ip_address: false
 max_connections: "100"
 work_mem: 4MB
 shared_buffers: 128MB
+
+
+# app related
+app_pgsql_dbname: "php"
+app_pgsql_dbuser: "php_app_user"
+app_pgsql_dbpassword: "pass123"

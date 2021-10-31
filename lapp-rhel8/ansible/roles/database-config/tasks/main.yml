@@ -24,3 +24,94 @@
     value: '{{ shared_buffers }}'
   notify:
   - restart postgresql
+
+- name: "Create a new database with name {{ app_pgsql_dbname }}"
+  community.postgresql.postgresql_db:
+    name: "{{ app_pgsql_dbname }}"
+
+- name: Create table 'user' with several columns in default tablespace 
+  community.postgresql.postgresql_table:
+    db: "{{ app_pgsql_dbname }}"
+    name: user
+    columns:
+    - id serial NOT NULL
+    - name character varying(250)
+    - email character varying(250)
+    - mobile_no bigint
+    - address text
+    - PRIMARY KEY (id)
+    #tablespace: pg_default
+
+
+- name: "Connect to {{ app_pgsql_dbname }} database, create {{ app_pgsql_dbuser }} user and grant access to database"
+  community.postgresql.postgresql_user:
+    db: "{{ app_pgsql_dbname }}"
+    name: "{{ app_pgsql_dbuser }}"
+    password: "{{ app_pgsql_dbpassword }}"
+    priv: "CONNECT"
+    #priv: "CONNECT/table1:ALL"
+    #expires: "Jan 31 2020"
+
+- name: Grant privs to '{{ app_pgsql_dbuser }}' on all tables in schema of database php
+  community.postgresql.postgresql_privs:
+    database: "{{ app_pgsql_dbname }}"
+    state: present
+    schema: public
+    privs: SELECT,INSERT,UPDATE,DELETE
+    type: table
+    objs: ALL_IN_SCHEMA
+    roles: "{{ app_pgsql_dbuser }}"
+    grant_option: no
+
+- name: Grant privs to '{{ app_pgsql_dbuser }}' on all sequences in schema of database php
+  community.postgresql.postgresql_privs:
+    database: "{{ app_pgsql_dbname }}"
+    state: present
+    schema: public
+    privs: ALL
+    type: sequence
+    objs: ALL_IN_SCHEMA
+    roles: "{{ app_pgsql_dbuser }}"
+    grant_option: no
+
+- name: Find if users has already rows
+  community.postgresql.postgresql_query:
+    db: "{{ app_pgsql_dbname }}"
+    query: SELECT id FROM public.user;
+  register: db_result_row
+
+- name: Insert data into table 'user' with named_args
+  community.postgresql.postgresql_query:
+    db: "{{ app_pgsql_dbname }}"
+    query: INSERT INTO public.user(name, email, mobile_no, address) VALUES (%(name)s, %(email)s, %(mobile_no)s, %(address)s)
+    named_args:
+      name: "John Doe"
+      email: "john@example.com"
+      mobile_no: "8007276845"
+      address: "201 Ivory Coral Ln, Merritt Island, FL 32953"
+  when: db_result_row.rowcount == 0
+
+- name: Insert data into table 'user' with positional_args
+  community.postgresql.postgresql_query:
+    db: "{{ app_pgsql_dbname }}"
+    query: INSERT INTO public.user(name, email, mobile_no, address) VALUES (%s, %s, %s, %s)
+    positional_args:
+      - "Jane Doe"
+      - "jane@example.com"
+      - "3058713800"
+      - "3900 NW 21st St, Miami, FL 33142"
+  when: db_result_row.rowcount == 0
+
+- name: Grant user '{{ app_pgsql_dbuser }}' access to database '{{ app_pgsql_dbname }}' from ipv4 localhost using md5 authentication
+  community.postgresql.postgresql_pg_hba:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    contype: host
+    users: "{{ app_pgsql_dbuser }}"
+    source: 127.0.0.1/32
+    databases: "{{ app_pgsql_dbname }}"
+    method: md5
+    state : present
+  notify:
+  - reload postgresql
+
+

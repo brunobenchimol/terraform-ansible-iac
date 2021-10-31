@@ -28,7 +28,7 @@
       (ansible_facts["os_family"] == "RedHat")  
 
 # Check if reboot is required
-- name: Check if a reboot is needed on all servers
+- name: Check if a reboot is needed on server(s)
   command: dnf needs-restarting -r
   register: reboot_required_result
   ignore_errors: yes
@@ -37,7 +37,7 @@
       (ansible_facts["os_family"] == "RedHat")  
 
 # Reboot if required
-- name: Reboot the server if updated
+- name: Reboot the server if needed
   reboot:
     msg: "Reboot initiated by Ansible for updates"
     connect_timeout: 5

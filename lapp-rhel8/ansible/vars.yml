@@ -7,6 +7,12 @@ pgsql_max_connections: "15"
 pgsql_work_mem: "2MB"
 pgsql_shared_buffers: "64MB"  
 
+app_pgsql_host: "127.0.0.1"
+app_pgsql_port: "5432"
+app_pgsql_dbname: "php"
+app_pgsql_dbuser: "php_app_user"
+app_pgsql_dbpassword: "pass123"
+
 lvm_pe_size: "16M"
 lvm_vg_name: "database_vg"
 lvm_pv_name: "/dev/sdb"

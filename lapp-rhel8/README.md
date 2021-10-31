@@ -43,8 +43,6 @@ RHEL 8.4
 # TODO
 
 1. Certbot / Lets Encrypt / ACME  
-2. Fully Configure Database (create db, import application sql dump)  
-3. Install/Create PHP Application that reads Database Information  
 
 # Notes / Caveats
 

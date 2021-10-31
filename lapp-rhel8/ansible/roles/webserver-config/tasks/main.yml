@@ -21,3 +21,54 @@
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/brunobenchimol/php-http-vars/main/index.php
     dest: /var/www/html/php-http-vars.php
+
+- name: Install Git Support
+  ansible.builtin.package:
+    name:
+     - git
+    state: present
+
+- name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots (allow HTTPD/PHP to connect to databases)
+  seboolean:
+    name: httpd_can_network_connect_db 
+    state: yes
+    persistent: yes
+  notify:
+    - restart httpd
+    
+- name: Download Application Using Git (https://github.com/brunobenchimol/php-crud-postgresql-example)
+  ansible.builtin.git:
+    repo: 'https://github.com/brunobenchimol/php-crud-postgresql-example.git'
+    update: no
+    force: no
+    dest: "{{ app_full_path }}"
+
+- name: Configure Application - Set DB Host
+  ansible.builtin.replace:
+    path: "{{ app_db_config_file }}"
+    regexp: 'db_hostname'
+    replace: "{{ app_pgsql_host }}"
+
+- name: Configure Application - Set DB Port
+  ansible.builtin.replace:
+    path: "{{ app_db_config_file }}"
+    regexp: 'db_port'
+    replace: "{{ app_pgsql_port }}"
+
+- name: Configure Application - Set DB Name
+  ansible.builtin.replace:
+    path: "{{ app_db_config_file }}"
+    regexp: 'db_name'
+    replace: "{{ app_pgsql_dbname }}"
+
+- name: Configure Application - Set DB User
+  ansible.builtin.replace:
+    path: "{{ app_db_config_file }}"
+    regexp: 'db_user'
+    replace: "{{ app_pgsql_dbuser }}"
+
+- name: Configure Application - Set DB Password
+  ansible.builtin.replace:
+    path: "{{ app_db_config_file }}"
+    regexp: 'db_password'
+    replace: "{{ app_pgsql_dbpassword }}"

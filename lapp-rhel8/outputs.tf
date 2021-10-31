@@ -1,8 +1,3 @@
-output "random-id" {
-    value = random_string.random.result
-    description = "Random ID (string) to append to name"
-}
-
 output "vm_ip_address" {
   value = "${formatlist(
     "%s = %s", 

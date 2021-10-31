@@ -27,6 +27,12 @@
       auto_attach: true
     when: lookup('env', 'ENABLE_RHN') == 'true'
 
+  - import_role:
+      name: webserver
+
+  - import_role:
+      name: webserver-config
+
   # collection community.postgresql depends on psycopg2 library installed on database host
   - name: Install python3-psycopg2 dependency for community.postgresql ansible galaxy collection
     ansible.builtin.package:
@@ -56,12 +62,6 @@
       shared_buffers: "{{ pgsql_shared_buffers }}"
       bind_all_ip_address: "{{ pgsql_bind_all_ip_address }}"
     become_user: postgres
-
-  - import_role:
-      name: webserver
-
-  - import_role:
-      name: webserver-config
 
   - import_role:
       name: upgrade-packages

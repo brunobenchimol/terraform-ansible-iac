@@ -3,3 +3,9 @@
     name: postgresql
     state: restarted
   become_user: root
+
+- name: reload postgresql
+  systemd:
+    name: postgresql
+    state: reloaded
+  become_user: root

@@ -132,6 +132,10 @@ resource "vsphere_virtual_machine" "vm-lapp" {
     #command = "ansible -i ${self.default_ip_address}, all --user root --private-key ${var.ssh_private_key} -m redhat_subscription  -a \"state=absent\""
     # Quick Fix: Create ansible.cfg in the root directory
     command = "ansible -i ${self.default_ip_address}, all --user root -m redhat_subscription  -a \"state=absent\""
+
+    environment = {
+      ANSIBLE_HOST_KEY_CHECKING = "False"
+    }
   }
  
 }
