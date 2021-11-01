@@ -35,8 +35,8 @@ RHEL 8.4
 # Preparing RHEL 8 Template
 
  You must install [cloud-init-vmware-guestinfo](https://github.com/vmware-archive/cloud-init-vmware-guestinfo) until Red Hat updates cloud-init to 21.3+.     
- There is a simple script on [scripts/rhel-prep-template.sh](https://github.com/brunobenchimol/terraform-ansible-cicd/blob/main/vsphere-rhel8-cloudinit/scripts/rhel-prep-template.sh) that help on this process. Other steps on the script are to cleanup the installation to better suit needs to provision/clone multiple VMs.  
- Its built on top of my previous project: [vsphere-rhel8-cloudinit](https://github.com/brunobenchimol/terraform-ansible-cicd/tree/main/vsphere-rhel8-cloudinit). So same Notes/Caveats Apply.  
+ There is a simple script on [scripts/rhel-prep-template.sh](https://github.com/brunobenchimol/terraform-ansible-iac/blob/main/lapp-rhel8/scripts/rhel-prep-template.sh) that help on this process. Other steps on the script are to cleanup the installation to better suit needs to provision/clone multiple VMs.  
+ Its built on top of my previous project: [vsphere-rhel8-cloudinit](https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/vsphere-rhel8-cloudinit). So same Notes/Caveats Apply.  
 
 **This step is mandatory and must be done outside of Terraform**
 
@@ -47,10 +47,10 @@ RHEL 8.4
 # Notes / Caveats
 
 1. **Built on top of vsphere-rhel8-cloudinit project**  
-Since its built on top of project [vsphere-rhel8-cloudinit](https://github.com/brunobenchimol/terraform-ansible-cicd/tree/main/vsphere-rhel8-cloudinit), it has the same [Notes/Caveats](https://github.com/brunobenchimol/terraform-ansible-cicd/tree/main/vsphere-rhel8-cloudinit#notes--caveats).   
+Since its built on top of project [vsphere-rhel8-cloudinit](https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/vsphere-rhel8-cloudinit), it has the same [Notes/Caveats](https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/vsphere-rhel8-cloudinit#notes--caveats).   
 
 2. **Only 1 VM, Not Scable**   
-Its only an example how to deploy a LAPP (opposed to [LAMP](https://en.wikipedia.org/wiki/LAMP_(software_bundle)). If you want a full-fledged installation check out my other implementation of [3 Tier Application](https://github.com/brunobenchimol/terraform-ansible-cicd/tree/main/3-tier-lb-web-db-application) (Multiple Web Servers, High Availability LoadBalancer and Database).   
+Its only an example how to deploy a LAPP (opposed to [LAMP](https://en.wikipedia.org/wiki/LAMP_(software_bundle)). If you want a full-fledged installation check out my other implementation of [3 Tier Application](https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/3-tier-lb-web-db-application) (Multiple Web Servers, High Availability LoadBalancer and Database).   
 
 3. **Is it only for RHEL ?**    
 Most of my IaC on RHEL systems. I could develop some on Debian aswell, but we running RHEL (Rocky Linux soon) since everyone has 16 "free" systems registered. Because of that Ansible Playbooks are mostly running only on RHEL and not Debian flavour distros.   
