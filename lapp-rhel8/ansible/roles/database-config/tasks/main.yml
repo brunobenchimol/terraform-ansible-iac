@@ -2,9 +2,9 @@
   community.postgresql.postgresql_set:
     name: listen_addresses
     value: "*"
+  when: bind_all_ip_address
   notify:
   - restart postgresql
-  when: bind_all_ip_address == 'true'
 
 - name: Set max_connections
   community.postgresql.postgresql_set:
