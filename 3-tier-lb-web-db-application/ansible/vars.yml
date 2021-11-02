@@ -32,8 +32,8 @@ app_pgsql_dbpassword: "pass123"
 haproxy_redirect_http_to_https: true
 self_signed_generate_pem_for_haproxy: true
 self_signed_domain:
-  - crud.rede.local
-  - apps.rede.local
+  - crud.example.local
+  - apps.example.local
 self_signed_cert_path: "/etc/ssl/localcerts"
 self_signed_organization_name: "Ansible Self-Signed CA"
 self_signed_expiration_date_in_days: 3650
