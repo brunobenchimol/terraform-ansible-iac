@@ -1,0 +1,7 @@
+self_signed_cert_path_with_domain: "{{ self_signed_cert_path }}/{{ self_signed_domain|first }}"
+private_key_path_filename: "{{ self_signed_cert_path_with_domain }}/{{ self_signed_domain|first }}.key"
+csr_path_filename: "{{ self_signed_cert_path_with_domain }}/{{ self_signed_domain|first }}.csr"
+certificate_path_filename: "{{ self_signed_cert_path_with_domain }}/{{ self_signed_domain|first }}.crt"
+haproxy_pem_path_filename: "{{ self_signed_cert_path_with_domain }}/{{ self_signed_domain|first }}.pem"
+self_signed_first_cn: "{{ self_signed_domain|first }}"
+dhparam_path_filename: "{{ self_signed_cert_path }}/dhparam.pem"

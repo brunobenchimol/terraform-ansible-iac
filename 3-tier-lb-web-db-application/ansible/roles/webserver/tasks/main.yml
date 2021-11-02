@@ -1,0 +1,28 @@
+- name: Install the correct web server for RHEL
+  import_tasks: redhat.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: Install the correct web server for Debian
+  import_tasks: debian.yml
+  when: ansible_facts['os_family']|lower == 'debian'
+
+- name: permit traffic in default zone for http service
+  firewalld:
+    service: http
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: permit traffic in default zone for https service
+  firewalld:
+    service: https
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: Example how to copy files - index-sample.html
+  copy:
+    src: index-sample.html
+    dest: /var/www/html/index-sample.html

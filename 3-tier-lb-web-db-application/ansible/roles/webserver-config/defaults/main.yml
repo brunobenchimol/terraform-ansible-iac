@@ -1,0 +1,7 @@
+app_full_path: /var/www/html/crud
+app_db_config_file: "{{ app_full_path }}/connection.inc.php"
+app_pgsql_host: "127.0.0.1"
+app_pgsql_port: "5432"
+app_pgsql_dbname: "php"
+app_pgsql_dbuser: "php_app_user"
+app_pgsql_dbpassword: "pass123"

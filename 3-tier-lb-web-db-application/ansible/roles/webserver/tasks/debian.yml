@@ -1,0 +1,16 @@
+- name: Install web server (Debian)
+  ansible.builtin.apt:
+    name: "apache2"
+    state: present
+
+- name: Make sure web server is running
+  systemd:
+    state: started
+    name: apache2
+    enabled: yes
+
+- name: Enable service apache2 and ensure it is not masked
+  systemd:
+    name: apache2
+    enabled: yes
+    masked: no

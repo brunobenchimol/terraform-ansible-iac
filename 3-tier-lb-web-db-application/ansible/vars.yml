@@ -1,0 +1,71 @@
+---
+
+linux_upgrade_packages: "{{ lookup('env', 'UPGRADE_PACKAGES')|lower | default('false') }}"
+#
+### DATABASE
+#
+pgsql_version: 13
+pgsql_use_redhat_appstream: true
+pgsql_bind_all_ip_address: true
+pgsql_max_connections: "15"
+pgsql_work_mem: "2MB"
+pgsql_shared_buffers: "64MB"  
+# DATABASE DISK
+lvm_pe_size: "16M"
+lvm_vg_name: "database_vg"
+lvm_pv_name: "/dev/sdb"
+lvm_lv_name: "pgsql_data"
+lvm_mount_path: "/var/lib/pgsql"
+
+#
+### APPLICATION
+#
+app_pgsql_host: "{{ (hostvars[groups['databases'][0]].ansible_host) }}"
+app_pgsql_port: "5432"
+app_pgsql_dbname: "php"
+app_pgsql_dbuser: "php_app_user"
+app_pgsql_dbpassword: "pass123"
+
+#
+###  SSL CERTIFICATE
+#
+haproxy_redirect_http_to_https: true
+self_signed_generate_pem_for_haproxy: true
+self_signed_domain:
+  - crud.rede.local
+  - apps.rede.local
+self_signed_cert_path: "/etc/ssl/localcerts"
+self_signed_organization_name: "Ansible Self-Signed CA"
+self_signed_expiration_date_in_days: 3650
+self_signed_create_dhparam: yes
+self_signed_dhsize: 4096
+
+#
+### KEEPALIVED
+#
+vrrp_nic: "{{ hostvars[groups['loadbalancers'][0]]['ansible_default_ipv4']['interface'] }}"
+keepalived_sync_groups:
+  haproxy:
+    instances:
+      - internal
+keepalived_instances:
+  internal:
+    interface: "{{ vrrp_nic }}"
+    #state: "{{ (groups['loadbalancers'].index(inventory_hostname) == 0) | ternary('MASTER','BACKUP') }}"
+    state: "{{ (hostvars[inventory_hostname].lb_primary == True) | ternary('MASTER','BACKUP') }}"
+    virtual_router_id: 20
+    priority: "{{ (groups['loadbalancers']|length - groups['loadbalancers'].index(inventory_hostname)) * 250 // (groups['all']|length) }}"
+    # Please set this if you want to use a virtual MAC address.
+    #use_vmac: true
+    # Please set this if you want to use authentication in your VRRP instance. If more than 8 characters, it will be truncated.
+    authentication_password: "{{ lookup('env', 'KEEPALIVE_PASSWORD') | default('randompwd') }}"
+    vips:
+      - "{{ lookup('env', 'KEEPALIVE_VIP') }} dev {{ vrrp_nic }}"
+    track_scripts:
+      - haproxy_check_script
+      #  - pingable_check_script
+    track_interfaces:
+      - "{{ vrrp_nic }}"
+keepalived_scripts:
+  haproxy_check_script:
+    check_script: "/usr/bin/killall -0 haproxy"

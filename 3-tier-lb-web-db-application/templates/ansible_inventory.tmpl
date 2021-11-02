@@ -1,0 +1,14 @@
+[webservers]
+%{ for index, fqdn in web_names ~}
+${fqdn} ansible_host=${web_ips[index]} 
+%{ endfor ~}
+
+[databases]
+%{ for index, fqdn in database_names ~}
+${fqdn} ansible_host=${database_ips[index]} 
+%{ endfor ~}
+
+[loadbalancers]
+%{ for index, fqdn in loadbalancer_names ~}
+${fqdn} ansible_host=${loadbalancer_ips[index]} ${ index == 0 ? "lb_primary=True" : "lb_primary=False" }
+%{ endfor ~}

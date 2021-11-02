@@ -1,0 +1,74 @@
+- name: Install PHP Support
+  ansible.builtin.package:
+    name:
+     - php
+     - php-pgsql
+    state: present
+  notify:
+  - restart httpd
+
+- name: Copy PHP Info File
+  ansible.builtin.copy:
+    src: phpinfo.php
+    dest: /var/www/html/phpinfo.php
+
+- name: Generate index.html from template
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+
+- name: Download File / PHP Application (PHP HTTP VARS)
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/brunobenchimol/php-http-vars/main/index.php
+    dest: /var/www/html/php-http-vars.php
+
+- name: Install Git Support
+  ansible.builtin.package:
+    name:
+     - git
+    state: present
+
+- name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots (allow HTTPD/PHP to connect to databases)
+  seboolean:
+    name: httpd_can_network_connect_db 
+    state: yes
+    persistent: yes
+  notify:
+    - restart httpd
+    
+- name: Download Application Using Git (https://github.com/brunobenchimol/php-crud-postgresql-example)
+  ansible.builtin.git:
+    repo: 'https://github.com/brunobenchimol/php-crud-postgresql-example.git'
+    update: no
+    force: no
+    dest: "{{ app_full_path }}"
+
+- name: Configure Application - Set DB Host
+  ansible.builtin.lineinfile:
+    path: "{{ app_db_config_file }}"
+    regexp: '^\$host ='
+    line: '$host = "{{ app_pgsql_host }}";'
+
+- name: Configure Application - Set DB Port
+  ansible.builtin.lineinfile:
+    path: "{{ app_db_config_file }}"
+    regexp: '^\$port ='
+    line: '$port = "{{ app_pgsql_port }}";'
+
+- name: Configure Application - Set DB Name
+  ansible.builtin.lineinfile:
+    path: "{{ app_db_config_file }}"
+    regexp: '^\$dbname ='
+    line: '$dbname = "{{ app_pgsql_dbname }}";'
+
+- name: Configure Application - Set DB User
+  ansible.builtin.lineinfile:
+    path: "{{ app_db_config_file }}"
+    regexp: '^\$user ='
+    line: '$user = "{{ app_pgsql_dbuser }}";'
+
+- name: Configure Application - Set DB Password
+  ansible.builtin.lineinfile:
+    path: "{{ app_db_config_file }}"
+    regexp: '^\$password ='
+    line: '$password = "{{ app_pgsql_dbpassword }}";'

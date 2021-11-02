@@ -1,0 +1,56 @@
+---
+- hosts: all
+  name: "Application Infraestructure Installation/Setup"
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+# unusual way to controlling playbook but it works since we do not have ansible inventory before provisioning. We also handle only "install here"
+
+  tasks:
+
+  - name: Delay 10 seconds and Wait 300 seconds for target connection to become reachable/usable
+    wait_for_connection:
+      delay: 10
+      timeout: 300
+
+  # Until roles are fixed, we must make sure we are running on RHEL and not Debian flavours
+  - name: Make sure we are running RHEL
+    ansible.builtin.assert:
+      that: 
+        - ansible_facts['os_family']|lower == 'redhat' 
+
+  - name: Register to RHN auto-subscribe to available content.
+    redhat_subscription:
+      state: present
+      username: "{{ lookup('env', 'RHN_USERNAME') }}"
+      password: "{{ lookup('env', 'RHN_PASSWORD') }}"
+      auto_attach: true
+    when: lookup('env', 'ENABLE_RHN') == 'true'
+
+  - import_role:
+      name: webserver
+    when: ansible_hostname is search("-web-") and ansible_hostname is regex('[0-9]$')
+
+  - import_role:   
+      name: lvm-add-extend-disk
+    vars:
+      pe_size: "{{ lvm_pe_size }}"
+      vg_name: "{{ lvm_vg_name }}"
+      pv_name: "{{ lvm_pv_name }}"
+      lv_name: "{{ lvm_lv_name }}"
+      mount_path: "{{ lvm_mount_path }}"
+    when: ansible_hostname is search("-db-") and ansible_hostname is regex('[0-9]$')
+
+  - import_role:   
+      name: postgresql-rhel
+    vars: 
+      postgresql_version: "{{ pgsql_version }}"
+      use_redhat_appstream: "{{ pgsql_use_redhat_appstream }}"
+    when: ansible_hostname is search("-db-") and ansible_hostname is regex('[0-9]$')
+
+  - import_role:
+      name: haproxy  
+    when: ansible_hostname is search("-lb-") and ansible_hostname is regex('[0-9]$')
+

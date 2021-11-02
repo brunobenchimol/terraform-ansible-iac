@@ -1,0 +1,51 @@
+- name: Create directory for storing keys and certificates
+  ansible.builtin.file:
+    path: "{{self_signed_cert_path_with_domain}}"
+    state: directory
+
+- name: Generate a Private Key
+  openssl_privatekey:
+    path: "{{private_key_path_filename}}"
+    type: RSA
+    size: 4096
+    state: present
+
+- name: Generate CSR
+  openssl_csr:
+    path: "{{csr_path_filename}}"
+    privatekey_path: "{{private_key_path_filename}}"
+    common_name: "{{self_signed_first_cn}}"
+    key_usage:
+      - digitalSignature
+    extended_key_usage:
+      - serverAuth
+    subject_alt_name: "{{ self_signed_domain | join(',') | regex_replace('^', 'DNS:') | regex_replace(',', ',DNS:') }}"
+
+- name: Generate Self-Signed Certificate
+  openssl_certificate:
+    path: "{{certificate_path_filename}}"
+    privatekey_path: "{{private_key_path_filename}}"
+    csr_path: "{{csr_path_filename}}"
+    provider: selfsigned
+    selfsigned_digest: sha256
+    selfsigned_not_after: "+{{ self_signed_expiration_date_in_days }}d"
+
+- name: "Generate Diffie-Hellman parameters with {{ self_signed_dhsize }} bits size"
+  openssl_dhparam:
+    path: "{{dhparam_path_filename}}"
+    size: "{{ self_signed_dhsize }}"
+    owner: root
+    group: root
+    state: present
+  when: self_signed_create_dhparam | bool
+
+- name: Assemble certificate crt and key on one pem file for haproxy
+  ansible.builtin.assemble:
+    dest: "{{haproxy_pem_path_filename}}"
+    src: "{{self_signed_cert_path_with_domain}}"
+    regexp: '(.crt$|.key$)'
+    remote_src: yes
+    owner: root
+    group: root
+    mode: '0600'
+  when: self_signed_generate_pem_for_haproxy | bool

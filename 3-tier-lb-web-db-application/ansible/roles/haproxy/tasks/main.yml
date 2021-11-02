@@ -1,0 +1,38 @@
+- name: Install 'haproxy'
+  ansible.builtin.package:
+    name: haproxy
+    state: present
+
+- name: Set haproxy_connect_any flag on and keep it persistent across reboots
+  seboolean:
+    name: haproxy_connect_any
+    state: yes
+    persistent: yes
+   
+- name: Make sure haproxy is running
+  systemd:
+    state: started
+    name: haproxy
+    enabled: yes
+
+- name: Enable service haproxy and ensure it is not masked
+  systemd:
+    name: haproxy
+    enabled: yes
+    masked: no
+
+- name: permit traffic in default zone for http service
+  firewalld:
+    service: http
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+- name: permit traffic in default zone for https service
+  firewalld:
+    service: https
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled

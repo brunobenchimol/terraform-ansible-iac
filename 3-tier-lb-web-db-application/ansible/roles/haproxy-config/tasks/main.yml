@@ -1,0 +1,45 @@
+- name: Apply haproxy.cfg Template
+  ansible.builtin.template: 
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify:
+  - reload haproxy
+
+- name: Configure rsyslogd to receive 'remote' messages
+  ansible.builtin.copy:
+    src: rsyslog-haproxy.conf
+    dest: /etc/rsyslog.d/10-haproxy.conf
+    owner: root
+    group: root
+    mode: '0640'
+  notify:
+    - restart rsyslog
+
+- name: Create haproxy log directory if it does not exist
+  ansible.builtin.file:
+    path: /var/log/haproxy
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Configure Logrotate - Set Files to rotate
+  ansible.builtin.lineinfile:
+    path: /etc/logrotate.d/haproxy
+    regexp: '^\/var\/log\/haproxy.log'
+    line: '/var/log/haproxy/haproxy*.log {'
+
+- name: Configure Logrotate - Set date to filename
+  ansible.builtin.lineinfile:
+    path: /etc/logrotate.d/haproxy
+    regexp: 'dateext'
+    insertafter: 'rotate'
+    firstmatch: yes
+    line: '    dateext'
+
+- name: Configure Logrotate - Set max files to keep to 30d
+  ansible.builtin.lineinfile:
+    path: /etc/logrotate.d/haproxy
+    regexp: 'rotate'
+    firstmatch: yes
+    line: '    rotate 30'

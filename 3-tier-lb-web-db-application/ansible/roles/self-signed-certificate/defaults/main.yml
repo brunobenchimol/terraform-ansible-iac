@@ -1,0 +1,15 @@
+self_signed_domain:
+  - www.example.local
+  - app.example.local
+  - apps.example.local
+
+self_signed_cert_path: "/etc/ssl/localcerts"
+self_signed_organization_name: "Ansible Self-signed CA"
+self_signed_expiration_date_in_days: 3650
+
+# Generate diffie-hellman parameters with the default size (4096 bits)
+self_signed_create_dhparam: yes
+self_signed_dhsize: 4096
+
+# Concatenate crt/key to generate pem file needed for haproxy
+self_signed_generate_pem_for_haproxy: false

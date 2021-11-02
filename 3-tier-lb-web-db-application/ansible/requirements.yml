@@ -1,0 +1,6 @@
+---
+roles:
+  - name: evrardjp.keepalived
+
+collections:
+  - name: community.postgresql
