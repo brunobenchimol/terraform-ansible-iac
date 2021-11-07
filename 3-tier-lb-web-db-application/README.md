@@ -72,7 +72,7 @@ Should feed somewhere this information to keep track of configuration and make b
 
 # References
 
-1. https://github.com/brunobenchimol/terraform-ansible-cicd/tree/main/vsphere-rhel8-cloudinit
+1. https://github.com/brunobenchimol/terraform-ansible-iac/tree/main/vsphere-rhel8-cloudinit
 2. https://www.percona.com/blog/2021/06/01/how-to-generate-an-ansible-inventory-with-terraform
 3. https://www.linkbynet.com/en/news/produce-an-ansible-inventory-with-terraform
 4. https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html
