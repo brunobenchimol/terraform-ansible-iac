@@ -1,11 +1,12 @@
+---
 - name: Install PHP Support
   ansible.builtin.package:
     name:
-     - php
-     - php-pgsql
+      - php
+      - php-pgsql
     state: present
   notify:
-  - restart httpd
+    - restart httpd
 
 - name: Copy PHP Info File
   ansible.builtin.copy:
@@ -25,17 +26,17 @@
 - name: Install Git Support
   ansible.builtin.package:
     name:
-     - git
+      - git
     state: present
 
 - name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots (allow HTTPD/PHP to connect to databases)
   seboolean:
-    name: httpd_can_network_connect_db 
+    name: httpd_can_network_connect_db
     state: yes
     persistent: yes
   notify:
     - restart httpd
-    
+
 - name: Download Application Using Git (https://github.com/brunobenchimol/php-crud-postgresql-example)
   ansible.builtin.git:
     repo: 'https://github.com/brunobenchimol/php-crud-postgresql-example.git'

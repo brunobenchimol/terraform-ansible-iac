@@ -1,5 +1,4 @@
 ---
-
 pgsql_version: 13
 pgsql_use_redhat_appstream: true
 pgsql_bind_all_ip_address: false

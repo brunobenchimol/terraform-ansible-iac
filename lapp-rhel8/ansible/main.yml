@@ -8,61 +8,61 @@
 
   tasks:
 
-  - name: Delay 10 seconds and Wait 300 seconds for target connection to become reachable/usable
-    wait_for_connection:
-      delay: 10
-      timeout: 300
+    - name: Delay 10 seconds and Wait 300 seconds for target connection to become reachable/usable
+      wait_for_connection:
+        delay: 10
+        timeout: 300
 
-  # Until roles are fixed, we must make sure we are running on RHEL and not Debian flavours
-  - name: Make sure we are running RHEL
-    ansible.builtin.assert:
-      that: 
-        - ansible_facts['os_family']|lower == 'redhat' 
+    # Until roles are fixed, we must make sure we are running on RHEL and not Debian flavours
+    - name: Make sure we are running RHEL
+      ansible.builtin.assert:
+        that:
+          - ansible_facts['os_family']|lower == 'redhat'
 
-  - name: Register to RHN auto-subscribe to available content.
-    redhat_subscription:
-      state: present
-      username: "{{ lookup('env', 'RHN_USERNAME') }}"
-      password: "{{ lookup('env', 'RHN_PASSWORD') }}"
-      auto_attach: true
-    when: lookup('env', 'ENABLE_RHN') == 'true'
+    - name: Register to RHN auto-subscribe to available content.
+      redhat_subscription:
+        state: present
+        username: "{{ lookup('env', 'RHN_USERNAME') }}"
+        password: "{{ lookup('env', 'RHN_PASSWORD') }}"
+        auto_attach: true
+      when: lookup('env', 'ENABLE_RHN') == 'true'
 
-  - import_role:
-      name: webserver
+    - import_role:
+        name: webserver
 
-  - import_role:
-      name: webserver-config
+    - import_role:
+        name: webserver-config
 
-  # collection community.postgresql depends on psycopg2 library installed on database host
-  - name: Install python3-psycopg2 dependency for community.postgresql ansible galaxy collection
-    ansible.builtin.package:
-      name: python3-psycopg2
-      state: present
+    # collection community.postgresql depends on psycopg2 library installed on database host
+    - name: Install python3-psycopg2 dependency for community.postgresql ansible galaxy collection
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
 
-  - import_role:   
-      name: lvm-add-extend-disk
-    vars:
-      pe_size: "{{ lvm_pe_size }}"
-      vg_name: "{{ lvm_vg_name }}"
-      pv_name: "{{ lvm_pv_name }}"
-      lv_name: "{{ lvm_lv_name }}"
-      mount_path: "{{ lvm_mount_path }}"
+    - import_role:
+        name: lvm-add-extend-disk
+      vars:
+        pe_size: "{{ lvm_pe_size }}"
+        vg_name: "{{ lvm_vg_name }}"
+        pv_name: "{{ lvm_pv_name }}"
+        lv_name: "{{ lvm_lv_name }}"
+        mount_path: "{{ lvm_mount_path }}"
 
-  - import_role:   
-      name: postgresql-rhel
-    vars: 
-      postgresql_version: "{{ pgsql_version }}"
-      use_redhat_appstream: "{{ pgsql_use_redhat_appstream }}"
+    - import_role:
+        name: postgresql-rhel
+      vars:
+        postgresql_version: "{{ pgsql_version }}"
+        use_redhat_appstream: "{{ pgsql_use_redhat_appstream }}"
 
-  - import_role: 
-      name: database-config
-    vars:
-      max_connections: "{{ pgsql_max_connections }}"
-      work_mem: "{{ pgsql_work_mem }}"
-      shared_buffers: "{{ pgsql_shared_buffers }}"
-      bind_all_ip_address: "{{ pgsql_bind_all_ip_address }}"
-    become_user: postgres
+    - import_role:
+        name: database-config
+      vars:
+        max_connections: "{{ pgsql_max_connections }}"
+        work_mem: "{{ pgsql_work_mem }}"
+        shared_buffers: "{{ pgsql_shared_buffers }}"
+        bind_all_ip_address: "{{ pgsql_bind_all_ip_address }}"
+      become_user: postgres
 
-  - import_role:
-      name: upgrade-packages
-    when: linux_upgrade_packages == 'true'
+    - import_role:
+        name: upgrade-packages
+      when: linux_upgrade_packages == 'true'

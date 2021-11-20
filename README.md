@@ -1,6 +1,9 @@
 # IaC on Terraform/Ansible
 *Infrastructure as Code Automation with Terraform/Ansible* 
 
+[![TF Lint](https://github.com/brunobenchimol/terraform-ansible-iac/actions/workflows/tflint.yml/badge.svg)](https://github.com/brunobenchimol/terraform-ansible-iac/actions/workflows/tflint.yml)
+[![YAML Lint](https://github.com/brunobenchimol/terraform-ansible-iac/actions/workflows/yamllint.yml/badge.svg)](https://github.com/brunobenchimol/terraform-ansible-iac/actions/workflows/yamllint.yml)
+
 Quick Links To Projects:
 
 | Project | Description |

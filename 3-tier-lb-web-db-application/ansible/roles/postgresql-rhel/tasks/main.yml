@@ -1,20 +1,21 @@
+---
 - name: Make sure we are running RHEL7+
   ansible.builtin.assert:
-    that: 
-      - ansible_facts['os_family']|lower == 'redhat' 
+    that:
+      - ansible_facts['os_family']|lower == 'redhat'
       - ansible_facts['distribution_major_version'] >= '7'
 
 - name: Install the PostgreSQL using RHEL AppStream
   import_tasks: rhel-native.yml
-  when: 
-   - use_redhat_appstream
-   - ansible_facts['distribution_major_version'] >= '8'
+  when:
+    - use_redhat_appstream
+    - ansible_facts['distribution_major_version'] >= '8'
 
-- name: Install the PostgreSQL using PGDG (postgresql.org) 
+- name: Install the PostgreSQL using PGDG (postgresql.org)
   import_tasks: rhel-pgdg.yml
-  when: 
-   - not use_redhat_appstream
-   - ansible_facts['distribution_major_version'] >= '7'
+  when:
+    - not use_redhat_appstream
+    - ansible_facts['distribution_major_version'] >= '7'
 
 - name: permit traffic (firewalld) in default zone for database service
   ansible.builtin.firewalld:

@@ -1,3 +1,4 @@
+---
 pe_size: 16M
 vg_name: myvg
 pv_name: "/dev/sdb"

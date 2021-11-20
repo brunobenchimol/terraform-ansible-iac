@@ -1,18 +1,19 @@
+---
 - name: Install web server (RHEL 4,5,6,7)
   ansible.builtin.yum:
-    name: 
-     - httpd
-     - mod_ssl
+    name:
+      - httpd
+      - mod_ssl
     state: present
   when:
-   - ((ansible_facts["distribution_major_version"] <= "6") or
-     (ansible_facts["distribution_major_version"] == "7"))
+    - ((ansible_facts["distribution_major_version"] <= "6") or
+      (ansible_facts["distribution_major_version"] == "7"))
 
 - name: Install web server (RHEL 8+)
   ansible.builtin.dnf:
     name:
-     - httpd
-     - mod_ssl
+      - httpd
+      - mod_ssl
     state: present
   when: (ansible_facts['distribution_major_version'] >= '8')
 

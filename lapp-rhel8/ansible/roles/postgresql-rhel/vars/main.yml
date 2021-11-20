@@ -1,2 +1,3 @@
+---
 acceptable_versions_rhel_native: [9.6, 10, 12, 13]
 acceptable_versions: [9.6, 10, 11, 12, 13, 14]

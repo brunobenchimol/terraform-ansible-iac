@@ -1,5 +1,4 @@
 ---
-
 linux_upgrade_packages: "{{ lookup('env', 'UPGRADE_PACKAGES')|lower | default('false') }}"
 #
 ### DATABASE
@@ -9,7 +8,7 @@ pgsql_use_redhat_appstream: true
 pgsql_bind_all_ip_address: true
 pgsql_max_connections: "15"
 pgsql_work_mem: "2MB"
-pgsql_shared_buffers: "64MB"  
+pgsql_shared_buffers: "64MB"
 # DATABASE DISK
 lvm_pe_size: "16M"
 lvm_vg_name: "database_vg"
@@ -51,12 +50,12 @@ keepalived_sync_groups:
 keepalived_instances:
   internal:
     interface: "{{ vrrp_nic }}"
-    #state: "{{ (groups['loadbalancers'].index(inventory_hostname) == 0) | ternary('MASTER','BACKUP') }}"
+    # state: "{{ (groups['loadbalancers'].index(inventory_hostname) == 0) | ternary('MASTER','BACKUP') }}"
     state: "{{ (hostvars[inventory_hostname].lb_primary == True) | ternary('MASTER','BACKUP') }}"
     virtual_router_id: 20
     priority: "{{ (groups['loadbalancers']|length - groups['loadbalancers'].index(inventory_hostname)) * 250 // (groups['all']|length) }}"
     # Please set this if you want to use a virtual MAC address.
-    #use_vmac: true
+    # use_vmac: true
     # Please set this if you want to use authentication in your VRRP instance. If more than 8 characters, it will be truncated.
     authentication_password: "{{ lookup('env', 'KEEPALIVE_PASSWORD') | default('randompwd') }}"
     vips:

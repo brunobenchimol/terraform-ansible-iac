@@ -1,3 +1,4 @@
+---
 - name: Install web server (Debian)
   ansible.builtin.apt:
     name: "apache2"

@@ -1,10 +1,11 @@
+---
 - name: Make sure we have valid PostgreSQL version set for RHEL AppStream
   ansible.builtin.assert:
-    that: 
+    that:
       - postgresql_version in acceptable_versions_rhel_native
     fail_msg: "postgresql_version must be in {{ acceptable_versions_rhel_native }}"
 
-- name: RHEL AppStream - Install Postgresql {{ postgresql_version }} Server 
+- name: RHEL AppStream - Install Postgresql {{ postgresql_version }} Server
   ansible.builtin.dnf:
     name: "@postgresql:{{ postgresql_version }}"
     enablerepo: rhel-8-for-x86_64-appstream-rpms
@@ -19,7 +20,7 @@
     recurse: yes
 
 - name: Initialize RHEL AppStream PostgreSQL Database
-  command: 
+  command:
     cmd: "/usr/bin/postgresql-setup initdb"
     creates: /var/lib/pgsql/data/postgresql.conf
 

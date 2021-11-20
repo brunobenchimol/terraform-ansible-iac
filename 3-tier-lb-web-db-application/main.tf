@@ -53,7 +53,7 @@ resource "vsphere_virtual_machine" "vm-web" {
   }
   
   clone {
-    template_uuid = "${data.vsphere_content_library_item.library_item.id}"
+    template_uuid = data.vsphere_content_library_item.library_item.id
    }
 
   # You must follow the rhel template preparation
@@ -94,7 +94,7 @@ resource "vsphere_virtual_machine" "vm-web" {
       type     = "ssh" # default
       port     = "22" # default
       user     = "root" # default
-      host      = "${self.default_ip_address}"
+      host      = self.default_ip_address
       private_key = file(var.ssh_private_key)
     }
 
@@ -158,7 +158,7 @@ resource "vsphere_virtual_machine" "vm-database" {
   }
 
   clone {
-    template_uuid = "${data.vsphere_content_library_item.library_item.id}"
+    template_uuid = data.vsphere_content_library_item.library_item.id
    }
 
   # You must follow the rhel template preparation
@@ -199,7 +199,7 @@ resource "vsphere_virtual_machine" "vm-database" {
       type     = "ssh" # default
       port     = "22" # default
       user     = "root" # default
-      host      = "${self.default_ip_address}"
+      host      = self.default_ip_address
       private_key = file(var.ssh_private_key)
     }
 
@@ -257,7 +257,7 @@ resource "vsphere_virtual_machine" "vm-loadbalancer" {
   }
   
   clone {
-    template_uuid = "${data.vsphere_content_library_item.library_item.id}"
+    template_uuid = data.vsphere_content_library_item.library_item.id
    }
 
   # You must follow the rhel template preparation
@@ -298,7 +298,7 @@ resource "vsphere_virtual_machine" "vm-loadbalancer" {
       type     = "ssh" # default
       port     = "22" # default
       user     = "root" # default
-      host      = "${self.default_ip_address}"
+      host      = self.default_ip_address
       private_key = file(var.ssh_private_key)
     }
 

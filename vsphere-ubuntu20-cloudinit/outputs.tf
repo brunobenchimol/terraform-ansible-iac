@@ -4,11 +4,11 @@ output "random-id" {
 }
 
 output "vm_ip_address" {
-  value = "${formatlist(
+  value = formatlist(
     "%s = %s", 
     (vsphere_virtual_machine.vm.*.name),
     (vsphere_virtual_machine.vm.*.default_ip_address)
-  )}"
+  )
 
   description = "Network IP address from Virtual Machines"
 }

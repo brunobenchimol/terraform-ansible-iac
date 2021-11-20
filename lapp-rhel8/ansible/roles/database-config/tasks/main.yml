@@ -1,47 +1,47 @@
+---
 - name: Change listen_address to bind to '*'
   community.postgresql.postgresql_set:
     name: listen_addresses
     value: "*"
   when: bind_all_ip_address
   notify:
-  - restart postgresql
+    - restart postgresql
 
 - name: Set max_connections
   community.postgresql.postgresql_set:
     name: max_connections
     value: '{{ max_connections }}'
   notify:
-  - restart postgresql
- 
+    - restart postgresql
+
 - name: Set work_mem
   community.postgresql.postgresql_set:
     name: work_mem
     value: '{{ work_mem }}'
 
-- name: Set shared_buffers 
+- name: Set shared_buffers
   community.postgresql.postgresql_set:
     name: shared_buffers
     value: '{{ shared_buffers }}'
   notify:
-  - restart postgresql
+    - restart postgresql
 
 - name: "Create a new database with name {{ app_pgsql_dbname }}"
   community.postgresql.postgresql_db:
     name: "{{ app_pgsql_dbname }}"
 
-- name: Create table 'user' with several columns in default tablespace 
+- name: Create table 'user' with several columns in default tablespace
   community.postgresql.postgresql_table:
     db: "{{ app_pgsql_dbname }}"
     name: user
     columns:
-    - id serial NOT NULL
-    - name character varying(250)
-    - email character varying(250)
-    - mobile_no bigint
-    - address text
-    - PRIMARY KEY (id)
-    #tablespace: pg_default
-
+      - id serial NOT NULL
+      - name character varying(250)
+      - email character varying(250)
+      - mobile_no bigint
+      - address text
+      - PRIMARY KEY (id)
+      # tablespace: pg_default
 
 - name: "Connect to {{ app_pgsql_dbname }} database, create {{ app_pgsql_dbuser }} user and grant access to database"
   community.postgresql.postgresql_user:
@@ -49,8 +49,8 @@
     name: "{{ app_pgsql_dbuser }}"
     password: "{{ app_pgsql_dbpassword }}"
     priv: "CONNECT"
-    #priv: "CONNECT/table1:ALL"
-    #expires: "Jan 31 2020"
+    # priv: "CONNECT/table1:ALL"
+    # expires: "Jan 31 2020"
 
 - name: Grant privs to '{{ app_pgsql_dbuser }}' on all tables in schema of database php
   community.postgresql.postgresql_privs:
@@ -110,8 +110,6 @@
     source: 127.0.0.1/32
     databases: "{{ app_pgsql_dbname }}"
     method: md5
-    state : present
+    state: present
   notify:
-  - reload postgresql
-
-
+    - reload postgresql

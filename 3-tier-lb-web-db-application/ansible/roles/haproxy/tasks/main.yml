@@ -1,3 +1,4 @@
+---
 - name: Install 'haproxy'
   ansible.builtin.package:
     name: haproxy
@@ -8,7 +9,7 @@
     name: haproxy_connect_any
     state: yes
     persistent: yes
-   
+
 - name: Make sure haproxy is running
   systemd:
     state: started

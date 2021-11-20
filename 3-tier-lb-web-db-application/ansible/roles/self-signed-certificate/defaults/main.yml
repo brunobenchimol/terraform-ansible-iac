@@ -1,3 +1,4 @@
+---
 self_signed_domain:
   - www.example.local
   - app.example.local

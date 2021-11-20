@@ -56,7 +56,7 @@ resource "vsphere_virtual_machine" "vm-lapp" {
 
 
   clone {
-    template_uuid = "${data.vsphere_content_library_item.library_item.id}"
+    template_uuid = data.vsphere_content_library_item.library_item.id
    }
 
   # You must follow the rhel template preparation
@@ -97,7 +97,7 @@ resource "vsphere_virtual_machine" "vm-lapp" {
       type     = "ssh" # default
       port     = "22" # default
       user     = "root" # default
-      host      = "${self.default_ip_address}"
+      host      = self.default_ip_address
       private_key = file(var.ssh_private_key)
     }
 

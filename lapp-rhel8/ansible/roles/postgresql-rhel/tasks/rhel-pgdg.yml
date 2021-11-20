@@ -1,6 +1,7 @@
+---
 - name: Make sure we have valid version set for PGDG
   ansible.builtin.assert:
-    that: 
+    that:
       - postgresql_version in acceptable_versions
     fail_msg: "postgresql_version must be in {{ acceptable_versions }}"
 
@@ -18,13 +19,13 @@
 
 # until dnf support disabling modules
 - name: Disable built-in Postgresql module from AppStream/BaseOS
-  command: 
+  command:
     cmd: "/usr/bin/dnf -qy module disable postgresql"
     # [WARNING]: Consider using the dnf module rather than running 'dnf'.  If you need to use command because dnf is insufficient you can add 'warn: false' to this command task.
     warn: false
   when: ansible_facts['distribution_major_version'] == '8'
 
-- name: Install PGDG Postgresql {{ postgresql_version }} Server   
+- name: Install PGDG Postgresql {{ postgresql_version }} Server
   ansible.builtin.package:
     name: postgresql{{ postgresql_version}}-server
     state: present
@@ -38,7 +39,7 @@
     recurse: yes
 
 - name: PGDG - Initialize PostgreSQL Database
-  command: 
+  command:
     cmd: "/usr/bin/postgresql-{{ postgresql_version}}-setup initdb"
     creates: /var/lib/pgsql/{{ postgresql_version}}/data/postgresql.conf
 

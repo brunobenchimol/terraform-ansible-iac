@@ -1,3 +1,4 @@
+---
 - name: reload haproxy
   systemd:
     name: haproxy

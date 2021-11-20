@@ -1,19 +1,20 @@
+---
 # RHEL / CentOS 8+ (DNF)
 - name: Upgrade all packages on servers
   dnf:
     name=*
     state=latest
   register: dnfcommandout
-  #when:
+  # when:
   #  - (ansible_facts['distribution_major_version'] >= '8') and
-  #    (ansible_facts["os_family"] == "RedHat")  
-  
+  #    (ansible_facts["os_family"] == "RedHat")
+
 - name: Print errors if dnf failed
   debug:
     msg: "dnf command produced errors"
   when: dnfcommandout is not defined
 
-# RHEL / CentOS - Install needs-restarting (pre-req reboot)  
+# RHEL / CentOS - Install needs-restarting (pre-req reboot)
 # - name: Make sure needs-restarting is installed (yum-utils)
 #   yum: name=yum-utils state=latest
 #   when:
@@ -25,7 +26,7 @@
   yum: name=dnf-utils state=latest
   when:
     - (ansible_facts['distribution_major_version'] >= '8') and
-      (ansible_facts["os_family"] == "RedHat")  
+      (ansible_facts["os_family"] == "RedHat")
 
 # Check if reboot is required
 - name: Check if a reboot is needed on server(s)
@@ -34,7 +35,7 @@
   ignore_errors: yes
   when:
     - (ansible_facts['distribution_major_version'] >= '8') and
-      (ansible_facts["os_family"] == "RedHat")  
+      (ansible_facts["os_family"] == "RedHat")
 
 # Reboot if required
 - name: Reboot the server if needed
@@ -45,5 +46,5 @@
     pre_reboot_delay: 0
     post_reboot_delay: 30
     test_command: uptime
-  when: 
-     - (reboot_required_result.rc == 1 and ansible_facts["os_family"] == "RedHat")
+  when:
+    - (reboot_required_result.rc == 1 and ansible_facts["os_family"] == "RedHat")

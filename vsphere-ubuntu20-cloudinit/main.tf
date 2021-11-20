@@ -44,7 +44,7 @@ resource "vsphere_virtual_machine" "vm" {
   }
   
   clone {
-    template_uuid = "${data.vsphere_content_library_item.library_item.id}"
+    template_uuid = data.vsphere_content_library_item.library_item.id
    }
 
   # If not using cloud-image you can use extra_configs (crashes on ubuntu because of vapp)
@@ -82,7 +82,7 @@ resource "vsphere_virtual_machine" "vm" {
     type     = "ssh"
     port     = "22"
     user     = "root"
-    host      = "${self.default_ip_address}"
+    host      = self.default_ip_address
     private_key = file(var.ssh_private_key)
   }
 

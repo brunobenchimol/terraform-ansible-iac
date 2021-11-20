@@ -14,23 +14,23 @@ data "vsphere_datacenter" "dc" {
 }
 data "vsphere_datastore" "datastore" {
   name          = var.vsphere_datastore
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 data "vsphere_compute_cluster" "cluster" {
   name          = var.vsphere_cluster
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 data "vsphere_network" "network" {
   name          =  var.vsphere_network
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 data "vsphere_network" "network_lb" {
   name          =  (var.vsphere_network_lb != "") ? var.vsphere_network_lb : var.vsphere_network
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 data "vsphere_resource_pool" "pool" {
   name          = "${data.vsphere_compute_cluster.cluster.name}/${var.vsphere_resoucepool}" 
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 data "vsphere_content_library" "library" {
   name = var.vsphere_library_name

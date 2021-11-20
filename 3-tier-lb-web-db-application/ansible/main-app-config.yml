@@ -1,5 +1,3 @@
-# Now using ansible inventory so you can keep track of your config. changes (more IaC)
-# Will work with Ansible Galaxy to reduce burden
 ---
 - name: "Application Configuration - Databases"
   hosts: databases
@@ -8,22 +6,24 @@
   vars_files:
     - vars.yml
 
+  # Now using ansible inventory so you can keep track of your config changes (more IaC-like)
+  # Will work with Ansible Galaxy to reduce burden/reuse proven community roles
   tasks:
-  
-  # collection community.postgresql depends on psycopg2 library installed on host
-  - name: Install python3-psycopg2 dependency for community.postgresql ansible galaxy collection
-    ansible.builtin.package:
-      name: python3-psycopg2
-      state: present
 
-  - import_role: 
-      name: database-config
-    vars:
-      max_connections: "{{ pgsql_max_connections }}"
-      work_mem: "{{ pgsql_work_mem }}"
-      shared_buffers: "{{ pgsql_shared_buffers }}"
-      bind_all_ip_address: "{{ pgsql_bind_all_ip_address }}"
-    become_user: postgres
+    # collection community.postgresql depends on psycopg2 library installed on host
+    - name: Install python3-psycopg2 dependency for community.postgresql ansible galaxy collection
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
+
+    - import_role:
+        name: database-config
+      vars:
+        max_connections: "{{ pgsql_max_connections }}"
+        work_mem: "{{ pgsql_work_mem }}"
+        shared_buffers: "{{ pgsql_shared_buffers }}"
+        bind_all_ip_address: "{{ pgsql_bind_all_ip_address }}"
+      become_user: postgres
 
 - name: "Application Configuration - Web Servers"
   hosts: webservers
@@ -33,7 +33,7 @@
     - vars.yml
 
   roles:
-   - webserver-config
+    - webserver-config
 
 - name: "Application Configuration - Load Balancers"
   hosts: loadbalancers
@@ -43,52 +43,52 @@
     - vars.yml
 
   roles:
-   - haproxy-config
+    - haproxy-config
 
   tasks:
 
-  - import_role: 
-      name: self-signed-certificate
-    when: groups['loadbalancers'].index(inventory_hostname) == 0
+    - import_role:
+        name: self-signed-certificate
+      when: groups['loadbalancers'].index(inventory_hostname) == 0
 
-  # dirty way to sync files (at least when setting up application)
-  - name: Fetch the cert file from the Master/Primary LB
-    ansible.builtin.fetch: 
-      src: "{{ haproxy_pem_path_filename }}" 
-      dest: cert.pem 
-      flat: yes
-    when: groups['loadbalancers'].index(inventory_hostname) == 0
+    # dirty way to sync files (at least when setting up application)
+    - name: Fetch the cert file from the Master/Primary LB
+      ansible.builtin.fetch:
+        src: "{{ haproxy_pem_path_filename }}"
+        dest: cert.pem
+        flat: yes
+      when: groups['loadbalancers'].index(inventory_hostname) == 0
 
-  - name: Ensure directory exist on remote hosts for storing keys and certificates
-    ansible.builtin.file:
-      path: "{{self_signed_cert_path_with_domain}}"
-      state: directory
-    when: groups['loadbalancers'].index(inventory_hostname) != 0 # run on other LB host(s)  
+    - name: Ensure directory exist on remote hosts for storing keys and certificates
+      ansible.builtin.file:
+        path: "{{self_signed_cert_path_with_domain}}"
+        state: directory
+      when: groups['loadbalancers'].index(inventory_hostname) != 0  # run on other LB host(s)
 
-  - name: "Ensure Diffie-Hellman parameters with {{ self_signed_dhsize }} bits size exists on other hosts"
-    openssl_dhparam:
-      path: "{{dhparam_path_filename}}"
-      size: "{{ self_signed_dhsize }}"
-      owner: root
-      group: root
-      state: present
-    when: 
-      - self_signed_create_dhparam | bool
-      - groups['loadbalancers'].index(inventory_hostname) != 0 
+    - name: "Ensure Diffie-Hellman parameters with {{ self_signed_dhsize }} bits size exists on other hosts"
+      openssl_dhparam:
+        path: "{{ dhparam_path_filename }}"
+        size: "{{ self_signed_dhsize }}"
+        owner: root
+        group: root
+        state: present
+      when:
+        - self_signed_create_dhparam | bool
+        - groups['loadbalancers'].index(inventory_hostname) != 0
 
-  - name: Copy the file to others LB nodes
-    ansible.builtin.copy: 
-      src: cert.pem 
-      dest: "{{ haproxy_pem_path_filename }}" 
-    when: groups['loadbalancers'].index(inventory_hostname) != 0 # run on other LB host(s)
+    - name: Copy the file to others LB nodes
+      ansible.builtin.copy:
+        src: cert.pem
+        dest: "{{ haproxy_pem_path_filename }}"
+      when: groups['loadbalancers'].index(inventory_hostname) != 0  # run on other LB host(s)
 
-  - name: Delete temporary/buffer local file
-    ansible.builtin.file: 
-      path: cert.pem 
-      state: absent 
-    delegate_to: localhost
-    become: false
-    run_once: true
+    - name: Delete temporary/buffer local file
+      ansible.builtin.file:
+        path: cert.pem
+        state: absent
+      delegate_to: localhost
+      become: false
+      run_once: true
 
 - name: "Load Balancers - Keepalived"
   hosts: loadbalancers
@@ -100,8 +100,8 @@
   roles:
 
     - role: evrardjp.keepalived
-      when: lookup('env', 'ENABLE_KEEPALIVED') == 'true' 
-      
+      when: lookup('env', 'ENABLE_KEEPALIVED') == 'true'
+
   tasks:
 
     - name: Allow VRRP (Keepalived) Traffic

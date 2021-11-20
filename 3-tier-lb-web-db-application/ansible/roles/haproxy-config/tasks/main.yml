@@ -1,9 +1,10 @@
+---
 - name: Apply haproxy.cfg Template
-  ansible.builtin.template: 
+  ansible.builtin.template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
   notify:
-  - reload haproxy
+    - reload haproxy
 
 - name: Configure rsyslogd to receive 'remote' messages
   ansible.builtin.copy:
