@@ -5,12 +5,12 @@
     pvs: '{{ pv_name }}'
     pesize: '{{ pe_size }}'
 
-- name: Create Logical Volume 
+- name: Create Logical Volume
   lvol:
     vg: '{{ vg_name }}'
     lv: '{{ lv_name }}'
     size: 100%FREE
-    resizefs : yes
+    resizefs: yes
     shrink: no
 
 - name: Format {{ lv_name }} with xfs filesystem

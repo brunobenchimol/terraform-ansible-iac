@@ -4,7 +4,7 @@ pgsql_use_redhat_appstream: true
 pgsql_bind_all_ip_address: false
 pgsql_max_connections: "15"
 pgsql_work_mem: "2MB"
-pgsql_shared_buffers: "64MB"  
+pgsql_shared_buffers: "64MB"
 
 app_pgsql_host: "127.0.0.1"
 app_pgsql_port: "5432"
