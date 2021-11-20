@@ -7,6 +7,8 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   tflint:
     runs-on: ${{ matrix.os }}
@@ -29,6 +31,7 @@ jobs:
       name: Setup TFLint
       with:
         tflint_version: latest
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Show version
       run: tflint --version
